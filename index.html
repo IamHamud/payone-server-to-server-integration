@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ecom Europa – PAYONE S2S Demo</title>
+  <link rel="icon" type="image/svg+xml" href="/src/images/favicon.svg" /><link rel="alternate icon" type="image/png" href="/src/images/favicon.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/feather-icons"></script>
+  <link rel="stylesheet" href="src/css/style.css" />
+</head>
+<body class="font-sans bg-white text-gray-800">
+
+  <!-- NAVBAR -->
+  <header class="flex justify-between items-center px-6 py-4 border-b">
+    <a href="index.html" class="flex items-center">
+      <img src="src/images/ecom-europa-logo.svg" alt="Ecom Europa" class="h-20 md:h-24" />
+    </a>
+    <div class="flex items-center space-x-4">
+      <i data-feather="search"></i>
+      <i data-feather="user"></i>
+      <i data-feather="heart"></i>
+      <i data-feather="shopping-bag" class="cursor-pointer" onclick="openCart()"></i>
+    </div>
+  </header>
+
+  <!-- CART DRAWER -->
+  <div id="cartDrawer" class="fixed top-0 right-0 w-96 h-full overflow-y-auto bg-white shadow-lg z-50 transform translate-x-full transition-transform duration-300">
+    <div class="p-6 flex justify-between items-center border-b">
+      <h2 class="text-xl font-bold">YOUR BAG</h2>
+      <button onclick="closeCart()">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+    <div class="p-6 border-b" id="cartItem"></div>
+    <div class="p-6">
+      <div class="flex justify-between mb-2">
+        <span>Subtotal</span>
+        <span id="cartSubtotal"></span>
+      </div>
+      <div class="flex justify-between mb-4 text-sm text-gray-500">
+        <span>Estimated Shipping</span>
+        <span>€ 0.00</span>
+      </div>
+      <div class="flex justify-between font-bold text-lg mb-4">
+        <span>Total</span>
+        <span id="cartTotal"></span>
+      </div>
+      <a href="src/pages/checkout.html" class="block text-center bg-[#E4002B] text-white py-3 rounded mb-2">CHECKOUT</a>
+      <a href="index.html" class="block text-center bg-gray-200 text-black py-3 rounded">CONTINUE SHOPPING</a>
+    </div>
+  </div>
+
+  <div id="backdrop" class="fixed inset-0 bg-black/50 z-40 hidden" onclick="closeCart()"></div>
+
+<!-- HERO SECTION (Video Background) -->
+<section class="relative w-full h-[80vh] overflow-hidden">
+  <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover">
+    <source src="src/images/hero-video.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+  <div class="absolute inset-0 bg-black/50 flex items-center justify-end pr-10">
+    <div class="text-right text-white max-w-md z-10">
+      <h1 class="text-3xl md:text-5xl font-bold mb-4">Ecom Europa</h1>
+      <p class="mb-6 text-sm md:text-lg">Fashion, delivered. Powered by PAYONE — learning demo.</p>
+      <a href="#products" class="bg-white text-black px-6 py-2 font-semibold rounded hover:bg-gray-200">SHOP NOW</a>
+    </div>
+  </div>
+</section>
+
+
+  <!-- PRODUCTS TABS -->
+  <section class="py-12 px-6" id="products">
+    <div class="flex justify-center mb-6">
+      <button id="tab-women" class="px-4 py-2 border font-semibold rounded-l bg-black text-white">Women</button>
+      <button id="tab-men" class="px-4 py-2 border font-semibold rounded-r">Men</button>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-6" id="product-grid">
+      <!-- Loaded by JS -->
+    </div>
+  </section>
+
+  <!-- BANNER: Hot Temps -->
+  <section class="relative w-full h-[60vh] bg-cover bg-center mb-12" style="background-image: url('src/images/hot-workout.jpg');">
+    <div class="absolute inset-0 bg-black/40 flex items-center justify-center text-center">
+      <div class="text-white">
+        <h2 class="text-3xl md:text-4xl font-bold mb-2">Hot Temps, Hotter Workouts</h2>
+        <p class="mb-4 text-sm md:text-lg">Fuel Your Progress With Summer-Inspired Style</p>
+        <div class="space-x-4">
+          <a href="#products" class="bg-white text-black px-4 py-2 rounded">SHOP MENS</a>
+          <a href="#products" class="bg-white text-black px-4 py-2 rounded">SHOP WOMENS</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+ <!-- DFYNE STYLE SECTION -->
+<section class="px-6 mb-12">
+  <h2 class="text-2xl font-bold mb-4">NEVER STILL. ALWAYS DYNAMIC.</h2>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+    <!-- 1: Dynamic Twist Back Bra (female) -->
+    <div class="text-center border rounded p-4 group hover:shadow relative">
+      <div onclick="handleProductClick('Dynamic Twist Back Bra', 'f-bra1.jpg', 160, 1228)" class="cursor-pointer">
+        <img src="src/images/f-bra1.jpg" class="w-full mb-2 object-cover" style="aspect-ratio: 1/1; object-fit: cover;">
+        <h3 class="font-semibold">Dynamic Twist Back Bra</h3>
+        <p class="text-sm">€ 160.00</p>
+        <p class="text-xs text-gray-500">1228 reviews</p>
+      </div>
+      <button class="bg-[#E4002B] text-white px-4 py-2 mt-2 rounded hover:opacity-90 z-10 absolute left-1/2 -translate-x-1/2 bottom-3"
+        onclick="event.stopPropagation(); addToCart({name:'Dynamic Twist Back Bra', image:'f-bra1.jpg', price:160, reviews:'1228', qty:1});">
+        Add to Cart
+      </button>
+    </div>
+    <!-- 2: M Essential Oversized T-Shirt (male, NEW) -->
+    <div class="text-center border rounded p-4 group hover:shadow relative">
+      <div onclick="handleProductClick('M Essential Oversized T-Shirt', 'm-oversized-tshirt.jpg', 150, 872)" class="cursor-pointer">
+        <img src="src/images/m-oversized-tshirt.jpg" class="w-full mb-2 object-cover" style="aspect-ratio: 1/1; object-fit: cover;">
+        <h3 class="font-semibold">M Essential Oversized T-Shirt</h3>
+        <p class="text-sm">€ 150.00</p>
+        <p class="text-xs text-gray-500">872 reviews</p>
+      </div>
+      <button class="bg-[#E4002B] text-white px-4 py-2 mt-2 rounded hover:opacity-90 z-10 absolute left-1/2 -translate-x-1/2 bottom-3"
+        onclick="event.stopPropagation(); addToCart({name:'M Essential Oversized T-Shirt', image:'m-oversized-tshirt.jpg', price:150, reviews:'872', qty:1});">
+        Add to Cart
+      </button>
+    </div>
+    <!-- 3: DSX Leana Deeb Abaya (female, NEW) -->
+    <div class="text-center border rounded p-4 group hover:shadow relative">
+      <div onclick="handleProductClick('DSX Leana Deeb Abaya', 'f-abaya.jpg', 250, 544)" class="cursor-pointer">
+        <img src="src/images/f-abaya.jpg" class="w-full mb-2 object-cover" style="aspect-ratio: 1/1; object-fit: cover;">
+        <h3 class="font-semibold">DSX Leana Deeb Abaya</h3>
+        <p class="text-sm">€ 250.00</p>
+        <p class="text-xs text-gray-500">544 reviews</p>
+      </div>
+      <button class="bg-[#E4002B] text-white px-4 py-2 mt-2 rounded hover:opacity-90 z-10 absolute left-1/2 -translate-x-1/2 bottom-3"
+        onclick="event.stopPropagation(); addToCart({name:'DSX Leana Deeb Abaya', image:'f-abaya.jpg', price:250, reviews:'544', qty:1});">
+        Add to Cart
+      </button>
+    </div>
+    <!-- 4: Muscle Tank (male) -->
+    <div class="text-center border rounded p-4 group hover:shadow relative">
+      <div onclick="handleProductClick('Muscle Tank', 'm-tank.jpg', 110, 325)" class="cursor-pointer">
+        <img src="src/images/m-tank.jpg" class="w-full mb-2 object-cover" style="aspect-ratio: 1/1; object-fit: cover;">
+        <h3 class="font-semibold">Muscle Tank</h3>
+        <p class="text-sm">€ 110.00</p>
+        <p class="text-xs text-gray-500">325 reviews</p>
+      </div>
+      <button class="bg-[#E4002B] text-white px-4 py-2 mt-2 rounded hover:opacity-90 z-10 absolute left-1/2 -translate-x-1/2 bottom-3"
+        onclick="event.stopPropagation(); addToCart({name:'Muscle Tank', image:'m-tank.jpg', price:110, reviews:'325', qty:1});">
+        Add to Cart
+      </button>
+    </div>
+  </div>
+</section>
+
+
+ <!-- FOOTER -->
+<footer class="bg-gray-100 px-6 py-12 mt-12 text-sm text-gray-700">
+  <div class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
+    <div>
+      <h5 class="font-bold mb-2">HELP</h5>
+      <p>FAQs</p>
+      <p>Delivery Information</p>
+      <p>Return Policy</p>
+      <p>Orders</p>
+      <p>Whatsapp</p>
+    </div>
+    <div>
+      <h5 class="font-bold mb-2">ABOUT US</h5>
+      <p>About Us</p>
+      <p>Careers</p>
+    </div>
+    <div>
+      <h5 class="font-bold mb-2">PAGES</h5>
+      <p>Terms & Conditions</p>
+      <p>Privacy Notice</p>
+      <p>Stores</p>
+      <p>Personal Shopping</p>
+    </div>
+  </div>
+
+  <div class="border-t pt-4 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 gap-2">
+    <p>© 2026 · Ecom Europa · Personal learning project. Not a real store — no orders are fulfilled. Not affiliated with PAYONE GmbH, Worldline, or any third party. All trademarks belong to their respective owners.</p>
+    <div class="flex gap-4 mt-2 md:mt-0 shrink-0">
+      <a href="#">Terms</a>
+      <a href="#">Privacy</a>
+      <a href="https://developer.payone.com" target="_blank" rel="noopener">PAYONE Docs</a>
+    </div>
+  </div>
+</footer>
+
+
+  <script>
+    feather.replace();
+
+    function handleProductClick(name, image, price, reviews) {
+      localStorage.setItem('selectedProduct', JSON.stringify({ name, image, price, reviews }));
+      window.location.href = 'src/pages/product.html';
+    }
+    // This makes the addToCart function available from main.js in global scope
+    window.addToCart = function(item) {
+      if (typeof window.addToCartFromMain === 'function') {
+        window.addToCartFromMain(item);
+      }
+    }
+  </script>
+  <script src="src/js/main.js"></script>
+</body>
+</html>

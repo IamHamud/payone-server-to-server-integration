@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment result – Ecom Europa</title>
+  <link rel="icon" type="image/svg+xml" href="/src/images/favicon.svg" /><link rel="alternate icon" type="image/png" href="/src/images/favicon.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="bg-white text-gray-800">
+
+  <header class="flex justify-between items-center px-6 py-4 border-b">
+    <a href="/index.html" class="flex items-center">
+      <img src="../images/ecom-europa-logo.svg" alt="Ecom Europa" class="h-20 md:h-24" />
+    </a>
+  </header>
+
+  <main class="max-w-2xl mx-auto py-12 px-4 text-center">
+    <h1 id="result-title" class="text-2xl font-bold mb-4">Checking your payment…</h1>
+    <p id="result-message" class="text-gray-600 mb-8">Please wait while we confirm the transaction with PAYONE.</p>
+    <pre id="result-detail" class="text-left text-xs bg-gray-50 border rounded p-4 overflow-auto hidden"></pre>
+    <a href="/index.html" class="inline-block mt-8 bg-[#E4002B] text-white py-3 px-6 rounded hover:bg-[#B0001F]">
+      Back to store
+    </a>
+  </main>
+
+  <script>
+    (async () => {
+      const titleEl = document.getElementById('result-title');
+      const msgEl = document.getElementById('result-message');
+      const detailEl = document.getElementById('result-detail');
+
+      // paymentId is set by checkout.js right before the 3-DS redirect / on frictionless success.
+      const paymentId = sessionStorage.getItem('payone.paymentId');
+      if (!paymentId) {
+        titleEl.innerText = 'No payment found';
+        msgEl.innerText = 'We could not find a payment reference in this browser session.';
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/payments/${paymentId}`);
+        const data = await res.json();
+
+        detailEl.classList.remove('hidden');
+        detailEl.innerText = JSON.stringify(data, null, 2);
+
+        const code = data.statusCode;
+        // 5 = PENDING_CAPTURE (auth ok), 9 = CAPTURED/PAID
+        if (code === 9 || code === 5) {
+          titleEl.innerText = 'Payment successful ✓';
+          msgEl.innerText = `Status: ${data.status} (code ${code})`;
+          sessionStorage.removeItem('payone.paymentId');
+          localStorage.removeItem('cart');
+        } else {
+          titleEl.innerText = 'Payment not completed';
+          msgEl.innerText = `Status: ${data.status || 'unknown'}${code != null ? ` · code ${code}` : ''}`;
+        }
+      } catch (err) {
+        console.error(err);
+        titleEl.innerText = 'Could not verify payment';
+        msgEl.innerText = err.message;
+      }
+    })();
+  </script>
+</body>
+</html>

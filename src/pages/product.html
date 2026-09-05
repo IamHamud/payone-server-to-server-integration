@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ecom Europa – Product</title>
+  <link rel="icon" type="image/svg+xml" href="/src/images/favicon.svg" /><link rel="alternate icon" type="image/png" href="/src/images/favicon.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/feather-icons"></script>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="bg-white text-gray-800">
+  <!-- NAVBAR -->
+  <header class="flex justify-between items-center px-6 py-4 border-b">
+    <a href="../../index.html" class="flex items-center">
+      <img src="../images/ecom-europa-logo.svg" alt="Ecom Europa" class="h-20 md:h-24" />
+    </a>
+    <div class="flex items-center space-x-4">
+      <i data-feather="search"></i>
+      <i data-feather="user"></i>
+      <i data-feather="heart"></i>
+      <i data-feather="shopping-bag" class="cursor-pointer" onclick="openCart()"></i>
+    </div>
+  </header>
+
+  <!-- CART DRAWER (FIXED) -->
+  <div id="cartDrawer" class="fixed top-0 right-0 w-96 h-full overflow-y-auto bg-white shadow-lg z-50 transform translate-x-full transition-transform duration-300">
+    <div class="p-6 flex justify-between items-center border-b">
+      <h2 class="text-xl font-bold">YOUR BAG</h2>
+      <button onclick="closeCart()">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+    <div class="p-6 border-b" id="cartItem"></div>
+    <div class="p-6">
+      <div class="flex justify-between mb-2">
+        <span>Subtotal</span>
+        <span id="cartSubtotal"></span>
+      </div>
+      <div class="flex justify-between mb-4 text-sm text-gray-500">
+        <span>Estimated Shipping</span>
+        <span>€ 0.00</span>
+      </div>
+      <div class="flex justify-between font-bold text-lg mb-4">
+        <span>Total</span>
+        <span id="cartTotal"></span>
+      </div>
+      <a href="checkout.html" class="block text-center bg-[#E4002B] text-white py-3 rounded mb-2">CHECKOUT</a>
+      <a href="../index.html" class="block text-center bg-gray-200 text-black py-3 rounded">CONTINUE SHOPPING</a>
+    </div>
+  </div>
+
+  <div id="backdrop" class="fixed inset-0 bg-black/50 z-40 hidden" onclick="closeCart()"></div>
+
+  <!-- PRODUCT SECTION -->
+  <div class="max-w-6xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-2 gap-12">
+    <!-- LEFT: Product Images -->
+    <div>
+      <img id="mainProductImage" src="" alt="Product Image" class="w-full rounded shadow mb-4" />
+      <div class="grid grid-cols-4 gap-4">
+        <img src="" class="w-full border p-1 rounded cursor-pointer" onclick="document.getElementById('mainProductImage').src=this.src" id="thumb1">
+        <img src="" class="w-full border p-1 rounded cursor-pointer" onclick="document.getElementById('mainProductImage').src=this.src" id="thumb2">
+        <img src="" class="w-full border p-1 rounded cursor-pointer" onclick="document.getElementById('mainProductImage').src=this.src" id="thumb3">
+        <img src="" class="w-full border p-1 rounded cursor-pointer" onclick="document.getElementById('mainProductImage').src=this.src" id="thumb4">
+      </div>
+    </div>
+
+    <!-- RIGHT: Product Info -->
+    <div>
+      <h1 id="productName" class="text-3xl font-bold mb-2"></h1>
+      <p id="productPrice" class="text-gray-500 mb-2"></p>
+      <p class="text-sm text-yellow-600 mb-4" id="productReviews"></p>
+
+      <!-- Colors -->
+      <div class="mb-4" id="productColors">
+        <p class="font-semibold mb-1">Color:</p>
+        <div class="flex gap-2" id="colorOptions"></div>
+      </div>
+
+      <!-- Sizes -->
+      <div class="mb-6" id="productSizes">
+        <p class="font-semibold mb-1">Size:</p>
+        <div class="flex gap-2" id="sizeOptions"></div>
+      </div>
+
+      <button id="addToCartBtn" class="bg-[#E4002B] text-white px-6 py-3 rounded w-full hover:opacity-90 mb-4">ADD TO CART</button>
+
+
+      <div class="text-sm text-gray-700 space-y-2" id="productDetails">
+        <p><strong>Model:</strong> Wearing size S</p>
+        <p><strong>Fit:</strong> True to size – choose your normal fit</p>
+        <p><strong>Features:</strong> </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load main.js FIRST -->
+  <script src="../js/main.js"></script>
+
+  <!-- Then run the product logic AFTER main.js is loaded -->
+  <script>
+    feather.replace();
+
+    // Always refresh cart drawer/backdrop/cartItem references (to avoid variable scope issues)
+    function refreshCartElements() {
+      window.cartDrawer = document.getElementById('cartDrawer');
+      window.backdrop = document.getElementById('backdrop');
+      window.cartContentContainer = document.getElementById('cartItem');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      refreshCartElements();
+
+      // PRODUCT DETAILS
+      const selected = JSON.parse(localStorage.getItem('selectedProduct')) || { name: 'F Crop Top', image: 'f-crop.jpg', price: 120, reviews: '160' };
+      document.getElementById('productName').textContent = selected.name;
+      document.getElementById('mainProductImage').src = `../images/${selected.image}`;
+      document.getElementById('mainProductImage').alt = selected.name;
+      document.getElementById('productPrice').textContent = `€ ${selected.price.toFixed(2)}`;
+      document.getElementById('productReviews').textContent = `★★★★★ (${selected.reviews} reviews)`;
+
+      // Thumbnails (fallback to main image if thumbs not found)
+      const baseImg = selected.image.replace('.jpg','');
+      ['thumb1','thumb2','thumb3','thumb4'].forEach((id, i) => {
+        const thumb = document.getElementById(id);
+        if (thumb) {
+          // e.g., "f-crop-thumb2.jpg"
+          thumb.src = `../images/${baseImg}-thumb${i+1}.jpg`;
+          // fallback
+          thumb.onerror = () => { thumb.src = `../images/${selected.image}`; };
+        }
+      });
+
+      // Color options
+      const colorOptions = document.getElementById('colorOptions');
+      ['red', 'blue', 'green'].forEach(color => {
+        const div = document.createElement('div');
+        div.className = `w-6 h-6 bg-${color}-500 rounded-full border cursor-pointer ${color === 'red' ? 'border-2 border-black' : 'border'}`;
+        div.onclick = () => console.log(`Selected color: ${color}`);
+        colorOptions.appendChild(div);
+      });
+
+      // Size options
+      const sizeOptions = document.getElementById('sizeOptions');
+      ['XS', 'S', 'M', 'L', 'XL'].forEach(size => {
+        const button = document.createElement('button');
+        button.className = 'px-3 py-1 border rounded hover:bg-black hover:text-white';
+        button.textContent = size;
+        button.onclick = () => console.log(`Selected size: ${size}`);
+        sizeOptions.appendChild(button);
+      });
+
+      // ADD TO CART with openCart
+      document.getElementById('addToCartBtn').addEventListener('click', () => {
+        refreshCartElements(); // always make sure you have latest DOM elements
+        addToCart({ ...selected, qty: 1 });  // from main.js (opens cart, renders)
+        openCart(); // force cart to open (even if already open)
+      });
+    });
+  </script>
+</body>
+</html>

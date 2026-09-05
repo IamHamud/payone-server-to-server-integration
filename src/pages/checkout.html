@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout – Ecom Europa</title>
+  <link rel="icon" type="image/svg+xml" href="/src/images/favicon.svg" /><link rel="alternate icon" type="image/png" href="/src/images/favicon.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="bg-white text-gray-800">
+
+  <header class="flex justify-between items-center px-6 py-4 border-b">
+    <a href="../../index.html" class="flex items-center">
+      <img src="../images/ecom-europa-logo.svg" alt="Ecom Europa" class="h-20 md:h-24" />
+    </a>
+    <span class="text-xs text-gray-500 uppercase tracking-wide">Secure checkout · PAYONE S2S</span>
+  </header>
+
+  <main class="max-w-2xl mx-auto py-12 px-4">
+    <h1 class="text-2xl font-bold mb-6">Checkout</h1>
+
+    <div id="cart-summary" class="mb-8 border rounded p-4 bg-gray-50">
+      <div class="flex justify-between text-lg">
+        <span>Order total</span>
+        <span id="cart-total">€0.00</span>
+      </div>
+    </div>
+
+    <section class="mb-6">
+      <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-500 mb-3">Card details</h2>
+      <!-- PAYONE's tokenizer.min.js injects the iframe inside this div. No card data touches this origin. -->
+      <div id="div-hosted-tokenization" class="border rounded overflow-hidden bg-white p-2" style="min-height: 320px;">
+        <div id="tokenizer-loading" class="p-6 text-sm text-gray-500">Loading secure card form…</div>
+      </div>
+    </section>
+
+    <button id="submit-payment" class="w-full bg-[#E4002B] text-white py-3 rounded hover:bg-[#B0001F] transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+      Pay securely
+    </button>
+
+    <div id="payment-status" class="mt-6 text-sm text-gray-600"></div>
+  </main>
+
+  <script src="../js/checkout.js"></script>
+</body>
+</html>

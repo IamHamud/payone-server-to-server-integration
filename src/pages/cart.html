@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ecom Europa – Cart</title>
+  <link rel="icon" type="image/svg+xml" href="/src/images/favicon.svg" /><link rel="alternate icon" type="image/png" href="/src/images/favicon.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/feather-icons"></script>
+  <link rel="stylesheet" href="src/css/style.css" />
+</head>
+<body class="bg-white text-gray-800 overflow-y-auto">
+
+  <!-- NAVBAR -->
+  <header class="flex justify-between items-center px-6 py-4 border-b">
+    <a href="../../index.html" class="flex items-center">
+      <img src="../images/ecom-europa-logo.svg" alt="Ecom Europa" class="h-20 md:h-24" />
+    </a>
+    <div class="flex items-center space-x-4">
+      <i data-feather="search"></i>
+      <i data-feather="user"></i>
+      <i data-feather="heart"></i>
+      <i data-feather="shopping-bag" class="cursor-pointer" onclick="openCart()"></i>
+    </div>
+  </header>
+
+  <!-- CART DRAWER -->
+  <div id="cartDrawer" class="fixed top-0 right-0 w-96 h-full bg-white shadow-lg z-50 transform translate-x-full transition-transform duration-300 overflow-y-auto">
+    <div class="p-6 flex justify-between items-center border-b">
+      <h2 class="text-xl font-bold">YOUR BAG</h2>
+      <button onclick="closeCart()">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+    <div id="cartItem" class="p-6 border-b h-[calc(100%-200px)] overflow-y-auto"></div>
+    <div class="p-6">
+      <div class="flex justify-between mb-2">
+        <span>Subtotal</span>
+        <span id="cartSubtotal">€ 0.00</span>
+      </div>
+      <div class="flex justify-between mb-4 text-sm text-gray-500">
+        <span>Estimated Shipping</span>
+        <span>€ 0.00</span>
+      </div>
+      <div class="flex justify-between font-bold text-lg mb-4">
+        <span>Total</span>
+        <span id="cartTotal">€ 0.00</span>
+      </div>
+      <a href="checkout.html" class="block text-center bg-[#E4002B] text-white py-3 rounded mb-2">CHECKOUT</a>
+      <a href="index.html" class="block text-center bg-gray-200 text-black py-3 rounded">CONTINUE SHOPPING</a>
+    </div>
+  </div>
+
+  <div id="backdrop" class="fixed inset-0 bg-black/50 z-40 hidden" onclick="closeCart()"></div>
+
+  <!-- Include main.js for all logic! -->
+  <script src="src/js/main.js"></script>
+  <script>
+    feather.replace();
+    // On page load, render cart items
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof renderCartItems === 'function') {
+        renderCartItems();
+      }
+    });
+  </script>
+</body>
+</html>
